@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quiz App</title>
+    <title>Evolve 3 - Exam Quiz</title>
     <style>
         * {
             margin: 0;
@@ -23,30 +23,47 @@
 
         .container {
             background: white;
-            border-radius: 10px;
-            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
-            max-width: 700px;
+            border-radius: 15px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            max-width: 900px;
             width: 100%;
-            padding: 40px;
+            padding: 50px;
         }
 
         .header {
             text-align: center;
-            margin-bottom: 30px;
+            margin-bottom: 40px;
         }
 
         .header h1 {
             color: #333;
+            font-size: 32px;
             margin-bottom: 10px;
+        }
+
+        .header p {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .progress-container {
+            margin-bottom: 30px;
+        }
+
+        .progress-info {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            font-size: 14px;
+            color: #666;
         }
 
         .progress-bar {
             width: 100%;
-            height: 8px;
+            height: 10px;
             background: #e0e0e0;
             border-radius: 10px;
             overflow: hidden;
-            margin-top: 15px;
         }
 
         .progress-fill {
@@ -75,11 +92,13 @@
             }
         }
 
-        .section-title {
-            color: #667eea;
-            font-size: 18px;
+        .section-info {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 25px;
             font-weight: 600;
-            margin-bottom: 20px;
         }
 
         .question {
@@ -87,46 +106,49 @@
         }
 
         .question-text {
-            font-size: 16px;
+            font-size: 18px;
             font-weight: 600;
             color: #333;
-            margin-bottom: 15px;
-            line-height: 1.5;
+            margin-bottom: 20px;
+            line-height: 1.6;
         }
 
         .options {
             display: flex;
             flex-direction: column;
-            gap: 10px;
+            gap: 12px;
         }
 
         .option {
             display: flex;
             align-items: center;
-            padding: 15px;
+            padding: 18px;
             border: 2px solid #e0e0e0;
-            border-radius: 8px;
+            border-radius: 10px;
             cursor: pointer;
             transition: all 0.3s ease;
+            background: white;
         }
 
         .option:hover {
             border-color: #667eea;
-            background: #f5f5f5;
+            background: #f8f9ff;
         }
 
         .option input[type="radio"] {
-            margin-right: 12px;
+            margin-right: 15px;
             cursor: pointer;
-            width: 18px;
-            height: 18px;
+            width: 20px;
+            height: 20px;
+            accent-color: #667eea;
         }
 
         .option label {
             cursor: pointer;
             flex: 1;
-            font-size: 15px;
+            font-size: 16px;
             color: #333;
+            font-weight: 500;
         }
 
         .option.selected {
@@ -137,6 +159,7 @@
         .option.correct {
             border-color: #4caf50;
             background: #f1f8f4;
+            animation: pulse 0.3s ease;
         }
 
         .option.incorrect {
@@ -144,18 +167,30 @@
             background: #fef1f1;
         }
 
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.02);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+
         .buttons {
             display: flex;
             gap: 15px;
             justify-content: space-between;
-            margin-top: 30px;
+            margin-top: 35px;
         }
 
         button {
-            padding: 12px 30px;
+            padding: 14px 30px;
             font-size: 16px;
             border: none;
-            border-radius: 8px;
+            border-radius: 10px;
             cursor: pointer;
             transition: all 0.3s ease;
             font-weight: 600;
@@ -164,19 +199,22 @@
         .btn-prev {
             background: #e0e0e0;
             color: #333;
+            min-width: 140px;
         }
 
-        .btn-prev:hover {
+        .btn-prev:hover:not(:disabled) {
             background: #d0d0d0;
+            transform: translateX(-2px);
         }
 
         .btn-next {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
             flex: 1;
+            min-width: 140px;
         }
 
-        .btn-next:hover {
+        .btn-next:hover:not(:disabled) {
             transform: translateY(-2px);
             box-shadow: 0 5px 15px rgba(102, 126, 234, 0.4);
         }
@@ -201,12 +239,40 @@
         .start-screen p,
         .result-screen p {
             color: #666;
-            margin-bottom: 20px;
-            line-height: 1.6;
+            margin-bottom: 15px;
+            line-height: 1.7;
+            font-size: 16px;
+        }
+
+        .quiz-description {
+            background: #f5f5f5;
+            padding: 20px;
+            border-radius: 10px;
+            margin: 25px 0;
+            text-align: left;
+        }
+
+        .quiz-description ul {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .quiz-description li {
+            padding: 8px 0;
+            padding-left: 25px;
+            position: relative;
+        }
+
+        .quiz-description li:before {
+            content: "✓";
+            position: absolute;
+            left: 0;
+            color: #667eea;
+            font-weight: bold;
         }
 
         .score-display {
-            font-size: 48px;
+            font-size: 56px;
             font-weight: bold;
             color: #667eea;
             margin: 30px 0;
@@ -214,22 +280,23 @@
 
         .score-details {
             background: #f5f5f5;
-            padding: 20px;
-            border-radius: 8px;
-            margin-bottom: 20px;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 25px;
         }
 
         .score-details p {
             font-size: 16px;
             color: #333;
-            margin: 10px 0;
+            margin: 12px 0;
+            font-weight: 500;
         }
 
         .btn-start,
         .btn-restart {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            padding: 15px 40px;
+            padding: 16px 40px;
             font-size: 18px;
         }
 
@@ -248,20 +315,21 @@
 
         .stats {
             display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 15px;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 20px;
             margin-top: 30px;
         }
 
         .stat-card {
-            background: #f5f5f5;
-            padding: 15px;
-            border-radius: 8px;
+            background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+            border: 2px solid #667eea33;
+            padding: 25px 15px;
+            border-radius: 10px;
             text-align: center;
         }
 
         .stat-value {
-            font-size: 24px;
+            font-size: 32px;
             font-weight: bold;
             color: #667eea;
         }
@@ -269,31 +337,148 @@
         .stat-label {
             color: #666;
             font-size: 14px;
+            margin-top: 8px;
+            font-weight: 500;
+        }
+
+        .performance-indicator {
+            display: inline-block;
+            margin-top: 15px;
+        }
+
+        .performance-indicator.excellent {
+            color: #4caf50;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .performance-indicator.good {
+            color: #2196F3;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .performance-indicator.average {
+            color: #ff9800;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .performance-indicator.poor {
+            color: #f44336;
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .review-section {
+            background: #f5f5f5;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 25px;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .review-item {
+            background: white;
+            padding: 15px;
+            margin-bottom: 12px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+        }
+
+        .review-item.incorrect {
+            border-left-color: #f44336;
+        }
+
+        .review-question {
+            font-weight: 600;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .review-answer {
+            font-size: 14px;
+            color: #666;
             margin-top: 5px;
+        }
+
+        .your-answer {
+            color: #f44336;
+        }
+
+        .correct-answer {
+            color: #4caf50;
+        }
+
+        @media (max-width: 600px) {
+            .container {
+                padding: 25px;
+            }
+
+            .header h1 {
+                font-size: 24px;
+            }
+
+            .question-text {
+                font-size: 16px;
+            }
+
+            .buttons {
+                flex-wrap: wrap;
+            }
+
+            .btn-prev, .btn-next {
+                flex: 1;
+                min-width: 120px;
+            }
+
+            .stats {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
         <div class="header">
-            <h1>📚 Quiz Master</h1>
-            <div class="progress-bar">
-                <div class="progress-fill" id="progressFill"></div>
-            </div>
+            <h1>📚 Evolve 3 - Exam Quiz</h1>
+            <p>Test your knowledge and improve your English proficiency</p>
         </div>
 
         <!-- Start Screen -->
         <div class="quiz-section active start-screen">
-            <h2>Welcome to Quiz Master</h2>
-            <p>Test your knowledge across different sections. Each section contains multiple-choice questions.</p>
-            <p>Click the button below to start the quiz.</p>
-            <button class="btn-start" onclick="startQuiz()">Start Quiz</button>
+            <h2>Welcome to Your Exam! 🎯</h2>
+            <p>Get ready to challenge yourself with comprehensive English questions across multiple sections.</p>
+            <div class="quiz-description">
+                <ul>
+                    <li>Multiple-choice questions from various topics</li>
+                    <li>Immediate feedback on your answers</li>
+                    <li>Detailed performance analysis</li>
+                    <li>Review your answers at the end</li>
+                    <li>Retake the quiz as many times as you want</li>
+                </ul>
+            </div>
+            <p style="color: #999; font-size: 14px; margin-top: 20px;">Total Questions: <span id="totalQuestions">0</span></p>
+            <button class="btn-start" onclick="startQuiz()">Start Quiz Now</button>
         </div>
 
         <!-- Quiz Screen -->
         <div class="quiz-section" id="quizScreen">
-            <div class="section-title" id="sectionTitle"></div>
+            <div class="section-info" id="sectionInfo"></div>
+            
+            <div class="progress-container">
+                <div class="progress-info">
+                    <span id="progressText"></span>
+                    <span id="timerDisplay"></span>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progressFill"></div>
+                </div>
+            </div>
+
             <div class="question" id="questionContainer"></div>
+            
             <div class="buttons">
                 <button class="btn-prev" onclick="previousQuestion()" id="btnPrev">← Previous</button>
                 <button class="btn-next" onclick="nextQuestion()" id="btnNext">Next →</button>
@@ -305,8 +490,10 @@
         <div class="quiz-section result-screen" id="resultScreen">
             <h2>Quiz Completed! 🎉</h2>
             <div class="score-display" id="scoreDisplay"></div>
+            <div class="performance-indicator" id="performanceIndicator"></div>
             <div class="score-details">
                 <p id="scoreText"></p>
+                <p id="timeText"></p>
             </div>
             <div class="stats">
                 <div class="stat-card">
@@ -317,27 +504,90 @@
                     <div class="stat-value" id="incorrectCount">0</div>
                     <div class="stat-label">Incorrect Answers</div>
                 </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="unansweredCount">0</div>
+                    <div class="stat-label">Unanswered</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="accuracyPercentage">0%</div>
+                    <div class="stat-label">Accuracy Rate</div>
+                </div>
             </div>
+            
+            <div class="review-section" id="reviewSection"></div>
+            
             <button class="btn-restart" onclick="restartQuiz()" style="margin-top: 30px; width: 100%;">Restart Quiz</button>
         </div>
     </div>
 
     <script>
-        // Sample Quiz Data - Replace with your actual data
+        // Comprehensive Quiz Data - Full Questions with Multiple Sections
         const quizData = [
-            { id: 201, section: 2, type: "mcq", q: "What is the capital of France?", options: ["London", "Berlin", "Paris", "Madrid"], answer: "C" },
-            { id: 202, section: 2, type: "mcq", q: "Which planet is known as the Red Planet?", options: ["Venus", "Mars", "Jupiter", "Saturn"], answer: "B" },
-            { id: 203, section: 2, type: "mcq", q: "What is the largest ocean on Earth?", options: ["Atlantic Ocean", "Indian Ocean", "Arctic Ocean", "Pacific Ocean"], answer: "D" },
-            { id: 204, section: 3, type: "mcq", q: "Who wrote 'Romeo and Juliet'?", options: ["Jane Austen", "William Shakespeare", "Mark Twain", "Charles Dickens"], answer: "B" },
-            { id: 205, section: 3, type: "mcq", q: "In which year did World War II end?", options: ["1943", "1944", "1945", "1946"], answer: "C" },
+            // Section 1: Vocabulary & Grammar
+            { id: 1, section: 1, type: "mcq", q: "Which word best completes the sentence: 'She is very _____ about her work.'", options: ["careless", "meticulous", "lazy", "ignorant"], answer: "B" },
+            { id: 2, section: 1, type: "mcq", q: "Choose the correct form: 'If I _____ you were coming, I would have prepared.'", options: ["know", "knew", "had known", "have known"], answer: "C" },
+            { id: 3, section: 1, type: "mcq", q: "What is the antonym of 'abundant'?", options: ["plentiful", "scarce", "plenty", "plenty"], answer: "B" },
+            { id: 4, section: 1, type: "mcq", q: "Which sentence is grammatically correct?", options: ["Neither of the students are ready.", "Neither of the students is ready.", "Neither student are ready.", "Both are wrong."], answer: "B" },
+            { id: 5, section: 1, type: "mcq", q: "Choose the word with similar meaning to 'procrastinate':", options: ["hasten", "delay", "rush", "proceed"], answer: "B" },
+            { id: 6, section: 1, type: "mcq", q: "Complete: 'The team _____ their strategy after analyzing the results.'", options: ["revise", "revises", "revised", "will revise"], answer: "C" },
+            { id: 7, section: 1, type: "mcq", q: "What does 'ubiquitous' mean?", options: ["rare", "everywhere", "invisible", "silent"], answer: "B" },
+            { id: 8, section: 1, type: "mcq", q: "Choose the correct idiom: 'It's raining _____.'", options: ["cats and dogs", "cats or dogs", "cats nor dogs", "cats and dog"], answer: "A" },
+
+            // Section 2: Reading Comprehension & Literature
+            { id: 9, section: 2, type: "mcq", q: "Who wrote 'Pride and Prejudice'?", options: ["Emily Brontë", "Jane Austen", "Charlotte Brontë", "Mary Shelley"], answer: "B" },
+            { id: 10, section: 2, type: "mcq", q: "In 'Hamlet,' what is the famous soliloquy about?", options: ["love", "revenge", "life and death", "ambition"], answer: "C" },
+            { id: 11, section: 2, type: "mcq", q: "Which book is set in the 1920s Jazz Age?", options: ["The Great Gatsby", "1984", "To Kill a Mockingbird", "The Catcher in the Rye"], answer: "A" },
+            { id: 12, section: 2, type: "mcq", q: "Who is the author of 'One Hundred Years of Solitude'?", options: ["Jorge Luis Borges", "Gabriel García Márquez", "Pablo Neruda", "Octavio Paz"], answer: "B" },
+            { id: 13, section: 2, type: "mcq", q: "What is the main theme of 'Moby Dick'?", options: ["love", "revenge and obsession", "adventure", "redemption"], answer: "B" },
+            { id: 14, section: 2, type: "mcq", q: "In 'The Great Gatsby,' what does the green light symbolize?", options: ["money", "hope and dreams", "jealousy", "nature"], answer: "B" },
+            { id: 15, section: 2, type: "mcq", q: "Which work is an autobiography by Malcolm X?", options: ["The Autobiography of Benjamin Franklin", "The Autobiography of Malcolm X", "I Know Why the Caged Bird Sings", "Just Kids"], answer: "B" },
+            { id: 16, section: 2, type: "mcq", q: "Who wrote 'Wuthering Heights'?", options: ["Jane Austen", "Charlotte Brontë", "Emily Brontë", "Anne Brontë"], answer: "C" },
+
+            // Section 3: Speaking & Listening
+            { id: 17, section: 3, type: "mcq", q: "What is the correct pronunciation stress for 'record' (noun)?", options: ["re-CORD", "RE-cord", "rec-ORD", "REC-ord"], answer: "B" },
+            { id: 18, section: 3, type: "mcq", q: "Choose the most natural response to 'How are you doing?'", options: ["I am doing good.", "I am doing well.", "I am doing fine.", "Both B and C"], answer: "D" },
+            { id: 19, section: 3, type: "mcq", q: "Which expression is most appropriate in formal conversation?", options: ["Hey, what's up?", "Good morning. How may I assist you?", "Yo!", "What's good?"], answer: "B" },
+            { id: 20, section: 3, type: "mcq", q: "How would you politely interrupt in a conversation?", options: ["Shut up!", "Excuse me, but...", "Listen here!", "I'm talking now!"], answer: "B" },
+            { id: 21, section: 3, type: "mcq", q: "Choose the correct stress pattern for 'photography':", options: ["PHO-tog-ra-phy", "pho-TOG-ra-phy", "pho-to-GRAP-hy", "pho-tog-RA-phy"], answer: "B" },
+            { id: 22, section: 3, type: "mcq", q: "What is the appropriate response to 'Thank you for your help'?", options: ["You're welcome.", "It was my pleasure.", "No problem.", "All of the above"], answer: "D" },
+            { id: 23, section: 3, type: "mcq", q: "Which phrase indicates disagreement politely?", options: ["You're wrong!", "I respectfully disagree.", "That's nonsense!", "Absolutely not!"], answer: "B" },
+            { id: 24, section: 3, type: "mcq", q: "How do you express uncertainty in English?", options: ["I'm definitely sure.", "I think... maybe... possibly...", "No doubt!", "Absolutely!"], answer: "B" },
+
+            // Section 4: Writing & Composition
+            { id: 25, section: 4, type: "mcq", q: "Which is the correct way to write a date?", options: ["12-25-2024", "December 25, 2024", "25 December 2024", "All are acceptable"], answer: "D" },
+            { id: 26, section: 4, type: "mcq", q: "What is the main purpose of a thesis statement?", options: ["introduce the topic", "summarize key points", "present the main argument", "attract attention"], answer: "C" },
+            { id: 27, section: 4, type: "mcq", q: "Which punctuation mark should follow a salutation in a formal letter?", options: ["comma", "colon", "semicolon", "dash"], answer: "B" },
+            { id: 28, section: 4, type: "mcq", q: "In academic writing, which tense is most commonly used?", options: ["present simple", "past simple", "present perfect", "future simple"], answer: "A" },
+            { id: 29, section: 4, type: "mcq", q: "What should a conclusion paragraph do?", options: ["introduce new ideas", "summarize main points", "provide citations", "ask questions"], answer: "B" },
+            { id: 30, section: 4, type: "mcq", q: "Which is NOT a characteristic of effective writing?", options: ["clarity", "coherence", "complexity", "conciseness"], answer: "C" },
+            { id: 31, section: 4, type: "mcq", q: "How should you organize information in a paragraph?", options: ["randomly", "from least to most important", "chronologically or logically", "All are acceptable"], answer: "C" },
+            { id: 32, section: 4, type: "mcq", q: "What is the correct way to cite a source in text (MLA)?", options: ["(Author, page)", "(Author page)", "Author (page)", "Author, page"], answer: "A" },
+
+            // Section 5: British vs American English
+            { id: 33, section: 5, type: "mcq", q: "What is the American English spelling of 'colour'?", options: ["colour", "color", "colur", "coler"], answer: "B" },
+            { id: 34, section: 5, type: "mcq", q: "In British English, what do you call the trunk of a car?", options: ["trunk", "boot", "case", "compartment"], answer: "B" },
+            { id: 35, section: 5, type: "mcq", q: "What is the British English term for 'apartment'?", options: ["house", "flat", "bungalow", "cottage"], answer: "B" },
+            { id: 36, section: 5, type: "mcq", q: "Choose the American English spelling:", options: ["travelling", "travelling", "traveling", "travelng"], answer: "C" },
+            { id: 37, section: 5, type: "mcq", q: "In American English, what is 'petrol'?", options: ["oil", "gas", "fuel", "diesel"], answer: "B" },
+            { id: 38, section: 5, type: "mcq", q: "What is the British term for 'eraser'?", options: ["rubber", "eraser", "extinguisher", "deleter"], answer: "A" },
+            { id: 39, section: 5, type: "mcq", q: "Choose the correct British spelling:", options: ["organize", "organise", "organaze", "organzze"], answer: "B" },
+            { id: 40, section: 5, type: "mcq", q: "In British English, what is a 'biscuit'?", options: ["cake", "bread", "cookie", "cracker"], answer: "C" },
         ];
 
         let currentQuestion = 0;
         let userAnswers = {};
         let quizStarted = false;
+        let startTime = 0;
+        let endTime = 0;
+
+        // Initialize total questions
+        document.getElementById('totalQuestions').textContent = quizData.length;
 
         function startQuiz() {
             quizStarted = true;
+            startTime = new Date();
+            currentQuestion = 0;
+            userAnswers = {};
             document.querySelector('.start-screen').classList.remove('active');
             document.getElementById('quizScreen').classList.add('active');
             displayQuestion();
@@ -345,14 +595,14 @@
 
         function displayQuestion() {
             const question = quizData[currentQuestion];
-            const section = [...new Set(quizData.map(q => q.section))].find(s => 
-                quizData.some(q => q.section === s)
-            );
-
-            document.getElementById('sectionTitle').textContent = `Section ${question.section}`;
             
+            // Section info
+            const sections = ['', 'Vocabulary & Grammar', 'Reading Comprehension', 'Speaking & Listening', 'Writing & Composition', 'British vs American English'];
+            document.getElementById('sectionInfo').textContent = `Section ${question.section}: ${sections[question.section]}`;
+            
+            // Question text
             let questionHTML = `
-                <div class="question-text">${question.q}</div>
+                <div class="question-text">Q${currentQuestion + 1}. ${question.q}</div>
                 <div class="options">
             `;
 
@@ -371,7 +621,7 @@
                     <div class="${classNames}">
                         <input type="radio" id="option${index}" name="answer" value="${optionLetter}" 
                             ${isSelected ? 'checked' : ''} onchange="selectAnswer('${optionLetter}')">
-                        <label for="option${index}">${optionLetter}. ${option}</label>
+                        <label for="option${index}"><strong>${optionLetter}.</strong> ${option}</label>
                     </div>
                 `;
             });
@@ -382,15 +632,12 @@
             // Update progress
             const progress = ((currentQuestion + 1) / quizData.length) * 100;
             document.getElementById('progressFill').style.width = progress + '%';
-
-            // Update counter
-            document.getElementById('questionCounter').textContent = 
-                `Question ${currentQuestion + 1} of ${quizData.length}`;
+            document.getElementById('progressText').textContent = `Question ${currentQuestion + 1} of ${quizData.length}`;
 
             // Update buttons
             document.getElementById('btnPrev').disabled = currentQuestion === 0;
             document.getElementById('btnNext').textContent = 
-                currentQuestion === quizData.length - 1 ? 'Finish' : 'Next →';
+                currentQuestion === quizData.length - 1 ? 'Submit Quiz →' : 'Next →';
         }
 
         function selectAnswer(answer) {
@@ -414,26 +661,68 @@
         }
 
         function showResults() {
+            endTime = new Date();
             let correct = 0;
             let incorrect = 0;
+            let unanswered = 0;
+            let reviewHTML = '';
 
             Object.keys(userAnswers).forEach(index => {
-                if (userAnswers[index] === quizData[index].answer) {
+                const question = quizData[index];
+                if (userAnswers[index] === question.answer) {
                     correct++;
                 } else {
                     incorrect++;
+                    const userOptionIndex = userAnswers[index].charCodeAt(0) - 65;
+                    const correctOptionIndex = question.answer.charCodeAt(0) - 65;
+                    reviewHTML += `
+                        <div class="review-item incorrect">
+                            <div class="review-question">Q${parseInt(index) + 1}. ${question.q}</div>
+                            <div class="review-answer"><span class="your-answer">Your answer: ${question.options[userOptionIndex]}</span></div>
+                            <div class="review-answer"><span class="correct-answer">Correct answer: ${question.options[correctOptionIndex]}</span></div>
+                        </div>
+                    `;
                 }
             });
 
+            unanswered = quizData.length - Object.keys(userAnswers).length;
+
             const score = Math.round((correct / quizData.length) * 100);
+            const accuracy = Math.round((correct / (correct + incorrect)) * 100) || 0;
+            const timeTaken = Math.floor((endTime - startTime) / 1000);
+            const minutes = Math.floor(timeTaken / 60);
+            const seconds = timeTaken % 60;
+
+            let performanceText = '';
+            let performanceClass = '';
+            if (score >= 90) {
+                performanceText = '🌟 Excellent! Outstanding Performance!';
+                performanceClass = 'excellent';
+            } else if (score >= 75) {
+                performanceText = '😊 Good Job! Keep Practicing!';
+                performanceClass = 'good';
+            } else if (score >= 60) {
+                performanceText = '😐 Average Performance. Study More!';
+                performanceClass = 'average';
+            } else {
+                performanceText = '😟 Needs Improvement. Try Again!';
+                performanceClass = 'poor';
+            }
 
             document.getElementById('quizScreen').classList.remove('active');
             document.getElementById('resultScreen').classList.add('active');
             document.getElementById('scoreDisplay').textContent = score + '%';
+            document.getElementById('performanceIndicator').className = 'performance-indicator ' + performanceClass;
+            document.getElementById('performanceIndicator').textContent = performanceText;
             document.getElementById('scoreText').textContent = 
                 `You answered ${correct} out of ${quizData.length} questions correctly.`;
+            document.getElementById('timeText').textContent = 
+                `Time taken: ${minutes}m ${seconds}s`;
             document.getElementById('correctCount').textContent = correct;
             document.getElementById('incorrectCount').textContent = incorrect;
+            document.getElementById('unansweredCount').textContent = unanswered;
+            document.getElementById('accuracyPercentage').textContent = accuracy + '%';
+            document.getElementById('reviewSection').innerHTML = reviewHTML || '<p style="text-align: center; color: #4caf50; font-weight: bold;">Perfect! All answers are correct! 🎊</p>';
         }
 
         function restartQuiz() {
